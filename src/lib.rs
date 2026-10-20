@@ -1303,6 +1303,11 @@ impl<'a> Parser<'a> {
                         _ => return Err(self.error("invalid escape sequence in quoted string")),
                     }
                 }
+                '\n' | '\r' => {
+                    return Err(self.error(
+                        "unexpected newline in quoted string. Possible missing closing quote",
+                    ));
+                }
                 ch if ch.is_control() => {
                     return Err(self.error("quoted strings cannot contain control characters"));
                 }
